@@ -1,0 +1,4 @@
+Contastic
+=========
+
+Console Helper Class
