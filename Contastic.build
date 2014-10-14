@@ -1,0 +1,17 @@
+<project name="Contastic" basedir="." default="RunStages">
+
+	<property name="root.dir" value="${project::get-base-directory()}" readonly="true"/>
+
+	<property name="stages" value="Clean,Compile,Package" readonly="true" />
+
+	<include buildfile="${root.dir}\Build\Properties\Global.build"/>
+
+	<target name="RunStages" depends="SetProperties">
+		<foreach item="String" in="${stages}" delim="," property="stage">
+			<do>
+				<nant buildfile="${root.dir}\Build\Stages\${stage}.build" target="${stage}" inheritall="true" inheritrefs="false" verbose="true" />
+			</do>
+		</foreach>
+	</target>
+
+</project>

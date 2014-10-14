@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Contastic</id>
+    <version>1.0.0</version>
+    <title>Contastic</title>
+    <description>Contastic is a console application library that reflects command line parameters onto objects</description>
+    <authors>Chris Wood</authors>
+    <language>en-US</language>
+    <projectUrl>http://github.com/flipbit/contastic</projectUrl>
+    <licenseUrl>https://raw.github.com/flipbit/contastic/master/LICENSE.md</licenseUrl>
+    <tags>console cli</tags>
+  </metadata>
+</package>

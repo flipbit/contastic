@@ -1,0 +1,27 @@
+<project name="Package-stage">
+	<target name="Package">
+
+		<!-- Copy source to NuGet Package -->
+		<copy todir="${artifacts.dir}\NuGet\src">
+			<fileset basedir="${root.dir}\${project.name}">
+				<include name="**/*.cs" />
+				<include name="**/*.txt" />
+				<include name="**/*.config" />
+				<exclude name="**/bin/**" />
+				<exclude name="**/obj/**" />
+				<exclude name="**/packages/**" />
+			</fileset>
+		</copy>
+
+		<!-- Copy NuSpec -->
+		<copy file="${root.dir}\Contastic.nuspec" tofile="${artifacts.dir}\NuGet\Contastic.nuspec" />
+
+		<!-- Compile NuSpec -->
+		<exec basedir="${root.dir}\Build\Tools\NuGet" program="NuGet.exe" workingdir="${artifacts.dir}\NuGet">
+			<arg value="pack" />
+			<arg value="${artifacts.dir}\NuGet\${project.name}.nuspec" />
+			<arg value="-Symbols" />
+		</exec>
+
+	</target>
+</project>

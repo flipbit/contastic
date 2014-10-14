@@ -1,0 +1,51 @@
+
+<project name="compile-stage">
+	<target name="Compile">
+
+		<foreach item="String" in="${dotnet.versions}" delim="," property="dotnet.version">
+			<do>
+
+				<!-- Set Solution File Name -->
+				<property name="solution.file" value="${project.name}.Net${dotnet.version}.sln" readonly="false" />
+				<if test="${dotnet.version=='45'}">
+					<property name="solution.file" value="${project.name}.sln" />
+				</if>
+
+				<property name="framework.version" value="${string::substring(int::to-string(dotnet.version), 0, 1)}.${string::substring(int::to-string(dotnet.version), 1, 1)}" />
+				<echo message="Version: ${framework.version}" />
+
+				<!-- Clean -->
+				<delete>
+					<fileset basedir="${root.dir}\">
+						<include name="**\bin\Release\**\*" />
+						<include name="**\obj\Release\**\*" />
+					</fileset>
+				</delete>
+
+				<!-- Compile -->
+				<exec basedir="${root.dir}\Source" program="${msbuild.dir}\msbuild.exe">
+					<arg value="${root.dir}\${solution.file}" />
+					<arg value="/t:Build" />
+					<arg value="/p:Configuration=Release" />
+					<arg value="/verbosity:quiet" />
+				</exec>
+
+				<!-- Run Unit Tests -->
+				<exec program="${root.dir}\Build\Tools\NUnit\nunit-console.exe">
+					<arg value="${root.dir}\${project.name}.Tests\bin\Release\${project.name}.Tests.dll" />
+					<arg value="/framework=net-${framework.version}" />
+				</exec>
+
+				<!-- Copy binaries to NuGet Package -->
+				<copy todir="${artifacts.dir}\NuGet\lib\net${dotnet.version}">
+					<fileset basedir="${root.dir}\${project.name}\bin\Release">
+						<include name="**/*.dll" />
+						<include name="**/*.config" />
+					</fileset>
+				</copy>
+
+			</do>
+		</foreach>
+
+	</target>
+</project>

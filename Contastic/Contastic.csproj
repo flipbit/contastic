@@ -40,8 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingException.cs" />
+    <Compile Include="ParameterAttribute.cs" />
+    <Compile Include="ParameterBinder.cs" />
+    <Compile Include="ParameterList.cs" />
     <Compile Include="ParameterParser.cs" />
-    <Compile Include="Parameter.cs" />
+    <Compile Include="ParameterItem.cs" />
     <Compile Include="ParameterParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

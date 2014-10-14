@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.Tests", "Contastic.Tests\Contastic.Tests.csproj", "{4DE3DCA5-054D-4A63-8E44-C608AAA5375D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.Tests", "Contastic.Tests\Contastic.Tests.Net20.csproj", "{4DE3DCA5-054D-4A63-8E44-C608AAA5375D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic", "Contastic\Contastic.csproj", "{DCA8537D-14BA-4C0F-A084-3F1A308D3362}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic", "Contastic\Contastic.Net20.csproj", "{DCA8537D-14BA-4C0F-A084-3F1A308D3362}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

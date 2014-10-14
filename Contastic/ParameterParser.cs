@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Contastic
 {
     /// <summary>
-    /// Parser to take an input string and convert it into a collection of <see cref="Parameter"/> objects.
+    /// Parser to take an input string and convert it into a collection of <see cref="ParameterItem"/> objects.
     /// </summary>
     public class ParameterParser
     {
@@ -32,29 +31,44 @@ namespace Contastic
         }
 
         /// <summary>
-        /// Parses the specified input into a <see cref="Parameter"/> list.
+        /// Parses the specified input into a <see cref="ParameterItem"/> list.
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns></returns>
-        public IList<Parameter> Parse(string input)
+        public ParameterList Parse(string input)
         {
-            var result = new List<Parameter>();
+            var results = new ParameterList();
 
             var matches = Regex.Split(input, @"(?<!""\b[^""]*)\s+(?![^""]*\b"")");
+
+            ParameterItem current = null;
 
             for (var i = 0; i < matches.Length; i++)
             {
                 var match = matches[i];
 
-                var parameter = new Parameter();
+                if (IsASwitch(match))
+                {
+                    if (current != null) results.Add(current);
 
-                parameter.Name = RemoveSwitch(match, Options);
-                parameter.Value = matches[++i];
+                    current = new ParameterItem();
+                    current.Name = RemoveSwitch(match);
+                }
+                else if (current != null)
+                {
+                    if (match.StartsWith(@"""")) match = match.Substring(1);
+                    if (match.EndsWith(@"""")) match = match.Substring(0, match.Length - 1);
 
-                result.Add(parameter);
+                    current.Values.Add(match);
+                }
             }
 
-            return result;
+            if (current != null)
+            {
+                results.Add(current);
+            }
+
+            return results;
         }
 
         /// <summary>
@@ -86,9 +100,14 @@ namespace Contastic
         /// <returns></returns>
         public bool IsASwitch(string input, IList<string> switches)
         {
-            if (string.IsNullOrWhiteSpace(input)) return false;
+            if (string.IsNullOrEmpty(input)) return false;
 
-            return switches.Any(input.StartsWith);
+            foreach (var @switch in switches)
+            {
+                if (input.StartsWith(@switch)) return true;
+            }
+
+            return false;
         }
 
         /// <summary>

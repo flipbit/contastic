@@ -36,7 +36,7 @@ namespace Contastic
             Assert.AreEqual("two", results[1].Value);
         }
 
-        [Test]
+        [Test]        
         public void TestParseOneParameterFlag()
         {
             var results = parser.Parse("-first");
@@ -45,6 +45,37 @@ namespace Contastic
             Assert.AreEqual("first", results[0].Name);
             Assert.AreEqual("", results[0].Value);
         }
+
+        [Test]
+        public void TestParseOneParameterMultipleValues()
+        {
+            var results = parser.Parse("-first one two three -second one");
+
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual("first", results[0].Name);
+            Assert.AreEqual("one", results[0].Values[0]);
+            Assert.AreEqual("two", results[0].Values[1]);
+            Assert.AreEqual("three", results[0].Values[2]);
+            Assert.AreEqual("one two three", results[0].Value);
+            Assert.AreEqual("second", results[1].Name);
+            Assert.AreEqual("one", results[1].Value);
+        }
+
+        [Test]
+        public void TestParseOneParameterWithQuotes()
+        {
+            var results = parser.Parse(@"-first ""one two"" three -second one");
+
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual("first", results[0].Name);
+            Assert.AreEqual("one two", results[0].Values[0]);
+            Assert.AreEqual("three", results[0].Values[1]);
+            Assert.AreEqual("one two three", results[0].Value);
+            Assert.AreEqual("second", results[1].Name);
+            Assert.AreEqual("one", results[1].Value);
+        }
+
+
 
         [Test]
         public void TestIsASwitchWhenParameter()
