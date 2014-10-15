@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandFinderTest.cs" />
+    <Compile Include="Commands\TestCommandOne.cs" />
+    <Compile Include="Commands\TestCommandTwo.cs" />
     <Compile Include="ParameterBinderTest.cs" />
     <Compile Include="ParameterParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -48,7 +51,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contastic\Contastic.csproj">
+    <ProjectReference Include="..\Contastic\Contastic.Net20.csproj">
       <Project>{DCA8537D-14BA-4C0F-A084-3F1A308D3362}</Project>
       <Name>Contastic</Name>
     </ProjectReference>

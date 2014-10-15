@@ -43,18 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandFinderTest.cs" />
+    <Compile Include="Commands\TestCommandOne.cs" />
+    <Compile Include="Commands\TestCommandTwo.cs" />
     <Compile Include="ParameterBinderTest.cs" />
     <Compile Include="ParameterParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Contastic\Contastic.csproj">
-      <Project>{DCA8537D-14BA-4C0F-A084-3F1A308D3362}</Project>
+    <ProjectReference Include="..\Contastic\Contastic.Net35.csproj">
+      <Project>{4DE3DCA5-054D-4A63-8E44-C608AAA5375E}</Project>
       <Name>Contastic</Name>
     </ProjectReference>
+  </ItemGroup>  
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

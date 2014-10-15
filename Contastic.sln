@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.Tests", "Contasti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic", "Contastic\Contastic.csproj", "{DCA8537D-14BA-4C0F-A084-3F1A308D3362}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.Demo", "Contastic.Demo\Contastic.Demo.csproj", "{FC9BE03E-2C41-4EF7-9B96-5A696FA04DAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{DCA8537D-14BA-4C0F-A084-3F1A308D3362}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCA8537D-14BA-4C0F-A084-3F1A308D3362}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCA8537D-14BA-4C0F-A084-3F1A308D3362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC9BE03E-2C41-4EF7-9B96-5A696FA04DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC9BE03E-2C41-4EF7-9B96-5A696FA04DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC9BE03E-2C41-4EF7-9B96-5A696FA04DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC9BE03E-2C41-4EF7-9B96-5A696FA04DAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

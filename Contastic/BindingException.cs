@@ -34,5 +34,16 @@ namespace Contastic
             Parameters = parameters;
             Target = target;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindingException" /> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="target">The value.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public BindingException(string message, object target, Exception innerException) : base(message, innerException)
+        {
+            Target = target;
+        }
     }
 }

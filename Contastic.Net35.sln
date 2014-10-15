@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.Tests", "Contastic.Tests\Contastic.Tests.Net35.csproj", "{4DE3DCA5-054D-4A63-8E44-C608AAA5375D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.Tests.Net35", "Contastic.Tests\Contastic.Tests.Net35.csproj", "{4DE3DCA5-054D-4A63-8E44-C608AAA5375D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic", "Contastic\Contastic.Net35.csproj", "{DCA8537D-14BA-4C0F-A084-3F1A308D3362}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.Net35", "Contastic\Contastic.Net35.csproj", "{4DE3DCA5-054D-4A63-8E44-C608AAA5375E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,10 @@ Global
 		{4DE3DCA5-054D-4A63-8E44-C608AAA5375D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DE3DCA5-054D-4A63-8E44-C608AAA5375D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DE3DCA5-054D-4A63-8E44-C608AAA5375D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCA8537D-14BA-4C0F-A084-3F1A308D3362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCA8537D-14BA-4C0F-A084-3F1A308D3362}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCA8537D-14BA-4C0F-A084-3F1A308D3362}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCA8537D-14BA-4C0F-A084-3F1A308D3362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE3DCA5-054D-4A63-8E44-C608AAA5375E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE3DCA5-054D-4A63-8E44-C608AAA5375E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE3DCA5-054D-4A63-8E44-C608AAA5375E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE3DCA5-054D-4A63-8E44-C608AAA5375E}.Release|Any CPU.Build.0 = Release|Any CPU	
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

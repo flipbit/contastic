@@ -14,7 +14,7 @@ namespace Contastic
         /// <value>
         /// The options.
         /// </value>
-        public ParameterParserOptions Options { get; private set; }
+        public Options Options { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterParser"/> class.
@@ -22,12 +22,7 @@ namespace Contastic
         public ParameterParser()
         {
             // Set default options
-            Options = new ParameterParserOptions();
-
-            // Default allowable switches
-            Options.ParameterSwitches.Add("-");
-            Options.ParameterSwitches.Add("--");
-            Options.ParameterSwitches.Add("/");
+            Options =Options.Defaults();
         }
 
         /// <summary>
@@ -87,7 +82,7 @@ namespace Contastic
         /// <param name="input">The input.</param>
         /// <param name="options">The options.</param>
         /// <returns></returns>
-        public bool IsASwitch(string input, ParameterParserOptions options)
+        public bool IsASwitch(string input, Options options)
         {
             return IsASwitch(input, options.ParameterSwitches);
         }
@@ -126,7 +121,7 @@ namespace Contastic
         /// <param name="input">The input.</param>
         /// <param name="options">The options.</param>
         /// <returns></returns>
-        public string RemoveSwitch(string input, ParameterParserOptions options)
+        public string RemoveSwitch(string input, Options options)
         {
             return RemoveSwitch(input, options.ParameterSwitches);
         }

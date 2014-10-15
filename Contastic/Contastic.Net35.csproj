@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DCA8537D-14BA-4C0F-A084-3F1A308D3362}</ProjectGuid>
+    <ProjectGuid>{DCA8537D-14BA-4C0F-A084-3F1A308D3363}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Contastic</RootNamespace>
@@ -40,14 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseConsole.cs" />
     <Compile Include="BindingException.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="CommandFinder.cs" />
+    <Compile Include="FlagAttribute.cs" />
+    <Compile Include="ICommand.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="ParameterAttribute.cs" />
     <Compile Include="ParameterBinder.cs" />
     <Compile Include="ParameterItem.cs" />
     <Compile Include="ParameterList.cs" />
     <Compile Include="ParameterParser.cs" />
-    <Compile Include="ParameterParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyInfoExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

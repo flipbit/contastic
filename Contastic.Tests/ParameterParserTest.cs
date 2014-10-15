@@ -106,7 +106,7 @@ namespace Contastic
         [Test]
         public void TestIsASwitchWhenParameterCustomOptions()
         {
-            var options = new ParameterParserOptions();
+            var options = new Options();
             options.ParameterSwitches.Add("=");
 
             Assert.IsTrue(parser.IsASwitch("=one", options));

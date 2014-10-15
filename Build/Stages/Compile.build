@@ -21,13 +21,27 @@
 						<include name="**\obj\Release\**\*" />
 					</fileset>
 				</delete>
+		        <foreach item="Folder" property="foldername">
+		            <in>
+		                <items basedir="${root.dir}\">
+		                    <include name="**\bin" />
+		                    <include name="**\obj" />
+		                </items>
+		            </in>
+		            <do>
+		                <delete dir="${foldername}" />
+		            </do>
+		        </foreach>
+
 
 				<!-- Compile -->
 				<exec basedir="${root.dir}\Source" program="${msbuild.dir}\msbuild.exe">
 					<arg value="${root.dir}\${solution.file}" />
 					<arg value="/t:Build" />
 					<arg value="/p:Configuration=Release" />
+					<arg value="/p:TargetFrameworkVersion=v${framework.version}" />
 					<arg value="/verbosity:quiet" />
+					<arg value="/tv:${framework.version}" />
 				</exec>
 
 				<!-- Run Unit Tests -->

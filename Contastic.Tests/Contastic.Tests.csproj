@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandFinderTest.cs" />
+    <Compile Include="Commands\TestCommandTwo.cs" />
+    <Compile Include="Commands\TestCommandOne.cs" />
     <Compile Include="ParameterBinderTest.cs" />
     <Compile Include="ParameterParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
