@@ -47,9 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Contastic\Contastic.csproj">
       <Project>{DCA8537D-14BA-4C0F-A084-3F1A308D3362}</Project>
       <Name>Contastic</Name>
