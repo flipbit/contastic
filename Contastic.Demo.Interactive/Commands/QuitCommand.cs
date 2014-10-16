@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace Contastic.Demo.Commands
+namespace Contastic.Demo.Interactive.Commands
 {
-    public class EchoCommand : Command<EchoCommand.Options>
+    public class QuitCommand : Command<QuitCommand.Options>
     {
+        [Flag("quit")]
         public class Options
         {
-            [Parameter(Name = "echo", Required = true)]
-            public string Message { get; set; }
         }
 
         /// <summary>
@@ -17,7 +16,7 @@ namespace Contastic.Demo.Commands
         /// <returns></returns>
         public override int Execute(Options options)
         {
-            Console.WriteLine(options.Message);
+            Environment.Exit(0);
 
             return 0;
         }

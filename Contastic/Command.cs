@@ -10,35 +10,37 @@
         /// Determines whether this instance can execute the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="options">The options.</param>
         /// <returns></returns>
-        public virtual bool CanExecute(string args)
+        public virtual bool CanExecute(string args, Options options)
         {
-            var binder = new ParameterBinder();
+            var binder = new ParameterBinder(options);
 
-            T options;
+            T parameters;
 
-            return binder.TryBind(args, out options);
+            return binder.TryBind(args, out parameters);
         }
 
         /// <summary>
         /// Executes the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="options">The options.</param>
         /// <returns></returns>
-        public int Execute(string args)
+        public int Execute(string args, Options options)
         {
-            var binder = new ParameterBinder();
+            var binder = new ParameterBinder(options);
 
-            var options = binder.Bind<T>(args);
+            var paramters = binder.Bind<T>(args);
             
-            return Execute(options);
+            return Execute(paramters);
         }
 
         /// <summary>
-        /// Executes the specified options.
+        /// Executes the specified paramters.
         /// </summary>
-        /// <param name="options">The options.</param>
+        /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
-        public abstract int Execute(T options);
+        public abstract int Execute(T parameters);
     }
 }

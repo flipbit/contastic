@@ -46,6 +46,7 @@
     <Compile Include="CommandFinder.cs" />
     <Compile Include="FlagAttribute.cs" />
     <Compile Include="ICommand.cs" />
+    <Compile Include="InteractiveCommandRunner.cs" />
     <Compile Include="ParameterAttribute.cs" />
     <Compile Include="ParameterBinder.cs" />
     <Compile Include="ParameterList.cs" />
@@ -53,7 +54,8 @@
     <Compile Include="ParameterItem.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyInfoExtensions.cs" />
+    <Compile Include="AttributeFinder.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

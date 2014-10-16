@@ -3,20 +3,11 @@
 namespace Contastic
 {
     /// <summary>
-    /// Decorates a property with the target for an incoming command line <see cref="Parameter"/>.
+    /// Decorates a property with the target for an incoming command line <see cref="ParameterItem"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class ParameterAttribute : Attribute
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterAttribute"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        public ParameterAttribute(string name)
-        {
-            Name = name;
-        }
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

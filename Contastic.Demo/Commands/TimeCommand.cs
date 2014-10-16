@@ -2,12 +2,11 @@
 
 namespace Contastic.Demo.Commands
 {
-    public class EchoCommand : Command<EchoCommand.Options>
+    public class TimeCommand : Command<TimeCommand.Options>
     {
+        [Flag("time")]
         public class Options
         {
-            [Parameter(Name = "echo", Required = true)]
-            public string Message { get; set; }
         }
 
         /// <summary>
@@ -17,7 +16,7 @@ namespace Contastic.Demo.Commands
         /// <returns></returns>
         public override int Execute(Options options)
         {
-            Console.WriteLine(options.Message);
+            Console.WriteLine("Current time: {0}", DateTime.Now.TimeOfDay);
 
             return 0;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Contastic.Commands;
 using NUnit.Framework;
 
@@ -20,7 +21,28 @@ namespace Contastic
         {
             var commands = finder.Find(GetType().Assembly);
 
-            Assert.AreEqual(2, commands.Count);
+            commands = commands.OrderBy(c => c.GetType().Name).ToList();
+
+            Assert.AreEqual(3, commands.Count);
+            Assert.AreEqual(typeof(TestCommandOne), commands[0].GetType());
+            Assert.AreEqual(typeof(TestCommandThree), commands[1].GetType());
+            Assert.AreEqual(typeof(TestCommandTwo), commands[2].GetType());
+        }
+
+        [Test]
+        public void TestFindCommandsWhenNoCommandsFound()
+        {
+            var commands = finder.Find(typeof(string).Assembly);
+
+            Assert.AreEqual(0, commands.Count);
+        }
+
+        [Test]
+        public void TestFindCommandsWhenNullAssembly()
+        {
+            var commands = finder.Find(null);
+
+            Assert.AreEqual(0, commands.Count);
         }
 
         [Test]
@@ -28,6 +50,7 @@ namespace Contastic
         {
             Assert.AreEqual(2, finder.CountParameters(typeof(TestCommandOne)));
             Assert.AreEqual(3, finder.CountParameters(typeof(TestCommandTwo)));
+            Assert.AreEqual(4, finder.CountParameters(typeof(TestCommandThree)));
         }
 
         [Test]

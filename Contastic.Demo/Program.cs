@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Contastic.Demo
 {
@@ -6,22 +7,30 @@ namespace Contastic.Demo
     {
         static void Main(string[] args)
         {
-            var runner = new DemoRunner();
+            var runner = new CommandRunner();
+            
             runner.Initialize(typeof(Program).Assembly);
 
-            while (true)
+            var exitCode = runner.Run(args);
+
+            if (exitCode == -1)
             {
-                Console.Write(">");
-
-                var command = Console.ReadLine();
-
-                var returnCode = runner.Run(command);
-
-                if (returnCode == -1)
-                {
-                    Console.WriteLine("Unknown command: {0}", command);
-                }
+                Console.WriteLine("Usage: contastic.demo.exe [args]");
+                Console.WriteLine("");
+                Console.WriteLine("Where [args]:");
+                Console.WriteLine("");
+                Console.WriteLine("-echo [message]    Print a message to the screen");
+                Console.WriteLine("-time              Print the time to the screen");
             }
+#if DEBUG
+            if (Debugger.IsAttached)
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+#endif
+
+            Environment.Exit(exitCode);
         }
     }
 }

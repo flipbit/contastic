@@ -114,16 +114,6 @@ namespace Contastic
         }
 
         [Test]
-        public void TestIsASwitchWhenParameterCustomSwitches()
-        {
-            var switches = new List<string>{ "#", ":" };
-
-            Assert.IsTrue(parser.IsASwitch("#one", switches));
-            Assert.IsTrue(parser.IsASwitch(":two", switches));
-            Assert.IsFalse(parser.IsASwitch("--three", switches));
-        }
-
-        [Test]
         public void TestRemoveParameterSwitch()
         {
             Assert.AreEqual("one", parser.RemoveSwitch("-one"));

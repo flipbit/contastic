@@ -26,6 +26,15 @@ namespace Contastic
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterBinder"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        public ParameterBinder(Options options)
+        {
+            Options = options;
+        }
+
+        /// <summary>
         /// Binds the specified input to an object of the given type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -33,7 +42,7 @@ namespace Contastic
         /// <returns></returns>
         public T Bind<T>(string input) where T : new()
         {
-            var parser = new ParameterParser();
+            var parser = new ParameterParser(Options);
 
             var parameters = parser.Parse(input);
 
@@ -57,6 +66,7 @@ namespace Contastic
 
             // Bind flags
             target = BindFlags(target, properties, parameters);
+            target = BindFlags(target, parameters);
 
             return target;
         }
@@ -120,12 +130,15 @@ namespace Contastic
         {
             foreach (var property in properties)
             {
-                var attribute = property.GetCustomAttribute<ParameterAttribute>();
+                var attribute = AttributeFinder.GetCustomAttribute<ParameterAttribute>(property);
 
                 if (attribute == null) continue;
 
-                // Skip empty parameters
-                if (string.IsNullOrEmpty(attribute.Name)) continue;
+                // Set empty names to those of the decorated property
+                if (string.IsNullOrEmpty(attribute.Name))
+                {
+                    attribute.Name = property.Name.ToLower();
+                }
 
                 // Set value
                 if (parameters.Contains(attribute.Name, Options.CaseInsensitve))
@@ -169,7 +182,7 @@ namespace Contastic
         {
             foreach (var property in properties)
             {
-                var attribute = property.GetCustomAttribute<FlagAttribute>();
+                var attribute = AttributeFinder.GetCustomAttribute<FlagAttribute>(property);
 
                 if (attribute == null) continue;
 
@@ -197,6 +210,23 @@ namespace Contastic
 
             return target;
         }
+
+        private T BindFlags<T>(T target, ParameterList parameters)
+        {
+            var attribute = AttributeFinder.GetCustomAttribute<FlagAttribute>(target.GetType());
+
+            if (attribute != null)
+            {
+                // Set value
+                if (!parameters.Contains(attribute.Name, Options.CaseInsensitve))
+                {
+                    throw new BindingException("Missing Flag: " + attribute.Name, parameters, target);
+                }
+            }
+
+            return target;
+        }
+
 
         private static void SetObjectProperty<T>(T target, PropertyInfo property, object value)
         {

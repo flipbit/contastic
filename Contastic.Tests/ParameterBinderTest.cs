@@ -8,25 +8,26 @@ namespace Contastic
     {
         private class TestClass
         {
-            [Parameter("name", Default = "John")]
+            [Parameter(Default = "John")]
             public string Name { get; set; }
 
-            [Parameter("age")]
+            [Parameter]
             public int Age { get; set; }
 
-            [Parameter("dob")]
+            [Parameter(Name = "dob")]
             public DateTime DateOfBirth { get; set; }
 
-            [Parameter("read-only")]
+            [Parameter]
             public int ReadOnly { get { return 3; } }
 
             [Flag("awake")]
             public bool Awake { get; set; }
         }
 
+        [Flag("required")]
         private class TestRequiredClass
         {
-            [Parameter("name", Required = true)]
+            [Parameter(Required = true)]
             public string Name { get; set; }
         }
 
@@ -115,7 +116,7 @@ namespace Contastic
         [Test]
         public void TestBindRequiredParameter()
         {
-            var result = binder.Bind<TestRequiredClass>("-name Jane");
+            var result = binder.Bind<TestRequiredClass>("-name Jane -required");
 
             Assert.AreEqual("Jane", result.Name);
         }

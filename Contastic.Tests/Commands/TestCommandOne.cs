@@ -4,10 +4,10 @@
     {
         public class Options
         {
-            [Parameter("one")]
+            [Parameter]
             public string One { get; set; }
 
-            [Parameter("two")]
+            [Parameter]
             public string Two { get; set; }
         }
 

@@ -1,14 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Contastic
 {
     /// <summary>
     /// Base class that assembles and executes a collection of <see cref="ICommand"/> objects
     /// </summary>
-    public abstract class CommandRunner
+    public class CommandRunner
     {
+        /// <summary>
+        /// Gets or sets the options.
+        /// </summary>
+        /// <value>
+        /// The options.
+        /// </value>
+        public Options Options { get; set; }
+
         /// <summary>
         /// Gets the commands.
         /// </summary>
@@ -22,6 +29,7 @@ namespace Contastic
         /// </summary>
         public CommandRunner()
         {
+            Options = Options.Defaults();
             Commands = new List<ICommand>();
         }
 
@@ -31,16 +39,7 @@ namespace Contastic
         /// <param name="args">The arguments.</param>
         public virtual int Run(string[] args)
         {
-            var sb = new StringBuilder();
-
-            foreach (var arg in args)  
-            {
-                if (sb.Length == 0) sb.Append(" ");
-
-                sb.Append(arg);
-            }
-
-            return Run(sb.ToString());
+            return Run(args.Join());
         }
 
         /// <summary>
@@ -52,14 +51,18 @@ namespace Contastic
         {
             foreach (var command in Commands)
             {
-                if (!command.CanExecute(arg)) continue;
+                if (!command.CanExecute(arg, Options)) continue;
 
-                return command.Execute(arg);
+                return command.Execute(arg, Options);
             }
 
             return -1;
         }
 
+        /// <summary>
+        /// Initializes this instance with commands from the specified assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
         public void Initialize(Assembly assembly)
         {
             var finder = new CommandFinder();

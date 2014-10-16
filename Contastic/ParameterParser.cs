@@ -21,8 +21,16 @@ namespace Contastic
         /// </summary>
         public ParameterParser()
         {
-            // Set default options
-            Options =Options.Defaults();
+            Options = Options.Defaults();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterParser"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        public ParameterParser(Options options)
+        {
+            Options = options;
         }
 
         /// <summary>
@@ -51,10 +59,7 @@ namespace Contastic
                 }
                 else if (current != null)
                 {
-                    if (match.StartsWith(@"""")) match = match.Substring(1);
-                    if (match.EndsWith(@"""")) match = match.Substring(0, match.Length - 1);
-
-                    current.Values.Add(match);
+                    current.Values.Add(match.StripQuotes());
                 }
             }
 
@@ -96,6 +101,8 @@ namespace Contastic
         public bool IsASwitch(string input, IList<string> switches)
         {
             if (string.IsNullOrEmpty(input)) return false;
+
+            if (switches.Count == 0) return true;            
 
             foreach (var @switch in switches)
             {

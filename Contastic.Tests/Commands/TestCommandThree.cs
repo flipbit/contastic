@@ -1,7 +1,8 @@
 ﻿namespace Contastic.Commands
 {
-    public class TestCommandTwo : Command<TestCommandTwo.Options>
+    public class TestCommandThree : Command<TestCommandThree.Options>
     {
+        [Flag("flag")]
         public class Options
         {
             [Parameter]

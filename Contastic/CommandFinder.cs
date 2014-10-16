@@ -19,6 +19,9 @@ namespace Contastic
         {
             var results = new List<ICommand>();
 
+            // Null reference check
+            if (assembly == null) return results;
+
             var types = assembly.GetTypes();
 
             foreach (var type in types)
@@ -73,12 +76,15 @@ namespace Contastic
 
             var optionsType = type.BaseType.GetGenericArguments()[0];
 
+            var classFlagAttribute = AttributeFinder.GetCustomAttribute<FlagAttribute>(optionsType);
+            if (classFlagAttribute != null) count++;
+
             var properties = optionsType.GetProperties();
 
             foreach (var property in properties)
             {
-                var flagAttribute = property.GetCustomAttribute<FlagAttribute>();
-                var parameterAttribute = property.GetCustomAttribute<ParameterAttribute>();
+                var flagAttribute = AttributeFinder.GetCustomAttribute<FlagAttribute>(property);
+                var parameterAttribute = AttributeFinder.GetCustomAttribute<ParameterAttribute>(property);
 
                 if (flagAttribute != null) count++;
                 if (parameterAttribute != null) count++;

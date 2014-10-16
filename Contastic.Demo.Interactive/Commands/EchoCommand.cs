@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Contastic.Demo.Commands
+namespace Contastic.Demo.Interactive.Commands
 {
     public class EchoCommand : Command<EchoCommand.Options>
     {
