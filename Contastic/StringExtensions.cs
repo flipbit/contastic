@@ -19,7 +19,7 @@ namespace Contastic
             {
                 foreach (var s in strings)
                 {
-                    if (string.IsNullOrWhiteSpace(s)) continue;
+                    if (string.IsNullOrEmpty(s)) continue;
 
                     if (sb.Length > 0) sb.Append(seperator);
 
@@ -37,7 +37,7 @@ namespace Contastic
         /// <returns></returns>
         public static string StripQuotes(this string input)
         {
-            if (string.IsNullOrWhiteSpace(input)) input = string.Empty;
+            if (string.IsNullOrEmpty(input)) input = string.Empty;
             if (input.StartsWith(@"""")) input = input.Substring(1);
             if (input.EndsWith(@"""")) input = input.Substring(0, input.Length - 1);
 

@@ -45,10 +45,12 @@
   <ItemGroup>
     <Compile Include="CommandFinderTest.cs" />
     <Compile Include="Commands\TestCommandOne.cs" />
+    <Compile Include="Commands\TestCommandThree.cs" />
     <Compile Include="Commands\TestCommandTwo.cs" />
     <Compile Include="ParameterBinderTest.cs" />
     <Compile Include="ParameterParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
