@@ -14,8 +14,17 @@ namespace Contastic
         /// <returns></returns>
         public override int Run(string arg)
         {
+            var firstRun = true;
+
             while (true)
             {
+                if (firstRun && !string.IsNullOrEmpty(arg))
+                {
+                    base.Run("-" + arg);
+
+                    firstRun = false;
+                }
+
                 Prompt();
 
                 var command = "-" + ReadUserInput();
