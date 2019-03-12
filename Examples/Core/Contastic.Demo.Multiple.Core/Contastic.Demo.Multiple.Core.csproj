@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Contastic</AssemblyName>
+    <RootNamespace>Contastic</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Contastic.Examples\Contastic.Examples.csproj" />
+    <ProjectReference Include="..\..\..\Contastic\Contastic.csproj" />
+  </ItemGroup>
+
+</Project>

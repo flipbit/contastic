@@ -12,7 +12,7 @@ namespace Contastic
         /// </summary>
         public Options()
         {
-            ParameterSwitches = new List<string>();    
+            ParameterSwitches = new List<string>();
         }
 
         /// <summary>
@@ -32,6 +32,14 @@ namespace Contastic
         public bool CaseInsensitve { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to strip smart quotes when parsing input.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [strip smart quotes]; otherwise, <c>false</c>.
+        /// </value>
+        public bool StripSmartQuotes { get; set; }
+
+        /// <summary>
         /// Gets the default options.
         /// </summary>
         /// <returns></returns>
@@ -47,6 +55,9 @@ namespace Contastic
 
             // Default to case insensitive
             options.CaseInsensitve = true;
+
+            // Replace smart quotes with regular quotes
+            options.StripSmartQuotes = true;
 
             return options;
         }

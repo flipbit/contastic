@@ -3,23 +3,18 @@
 namespace Contastic
 {
     /// <summary>
-    /// Decorates a property with the target for an incoming command line <see cref="ParameterItem"/>.
+    /// Maps an unnamed parameter onto a class
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class ParameterAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public class UnnamedParameterAttribute : Attribute
     {
         /// <summary>
-        /// Gets or sets the name.
+        /// The unnamed parameter order
         /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public string LongName { get; set; }
-
-        public char ShortName { get; set; }
+        public int Order { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ParameterAttribute"/> is required.
+        /// Gets or sets a value indicating whether this <see cref="UnnamedParameterAttribute"/> is required.
         /// </summary>
         /// <value>
         ///   <c>true</c> if required; otherwise, <c>false</c>.
