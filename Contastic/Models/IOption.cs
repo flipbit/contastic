@@ -5,5 +5,7 @@
         string LongName { get; }
 
         char ShortName { get; }
+
+        string Description { get; }
     }
 }

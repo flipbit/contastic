@@ -6,7 +6,7 @@ namespace Contastic.Commands
     [Verb("pull")]
     public class PullCommand : ICommand
     {
-        [UnnamedParameter(Order = 0, Required = true)]
+        [Argument(Order = 0, Required = true)]
         public string Source { get; set; }
 
         public Task<int> Execute()

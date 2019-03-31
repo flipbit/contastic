@@ -4,68 +4,68 @@ using Contastic.Models;
 
 namespace Contastic.Parsing
 {
-    public class ParameterParser
+    internal class TokenParser
     {
-        public IList<Parameter> Parse(string input)
+        public IList<Token> Parse(string input)
         {
-            var parameters = new List<Parameter>();
+            var parameters = new List<Token>();
 
-            var enumerator = new ParameterEnumerator(input);
+            var enumerator = new TokenEnumerator(input);
 
             if (enumerator.IsEmpty)
             {
                 return parameters;
             }
 
-            var state = ParameterParserState.AtStart;
-            var parameter = new Parameter();
+            var state = TokenParserState.AtStart;
+            var parameter = new Token();
 
             while (enumerator.IsEmpty == false)
             {
                 switch (state)
                 {
-                    case ParameterParserState.AtStart:
+                    case TokenParserState.AtStart:
                         ParseStart(enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InPreamble:
+                    case TokenParserState.InPreamble:
                         ParsePreamble(enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InVerb:
+                    case TokenParserState.InVerb:
                         ParseVerb(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InSingleQuotedVerb:
+                    case TokenParserState.InSingleQuotedVerb:
                         ParseSingleQuotedVerb(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InDoubleQuotedVerb:
+                    case TokenParserState.InDoubleQuotedVerb:
                         ParseDoubleQuotedVerb(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InValue:
+                    case TokenParserState.InValue:
                         ParseValue(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InSwitch:
+                    case TokenParserState.InSwitch:
                         ParseSwitch(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InArgument:
+                    case TokenParserState.InArgument:
                         ParseArgument(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InDoubleQuotedValue:
+                    case TokenParserState.InDoubleQuotedValue:
                         ParseDoubleQuotedValue(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
-                    case ParameterParserState.InSingleQuotedValue:
+                    case TokenParserState.InSingleQuotedValue:
                         ParseSingleQuotedValue(ref parameters, ref parameter, enumerator, ref state);
                         break;
 
                     default:
-                        throw new ContasticException($"Unknown {nameof(ParameterParserState)}: {state}");
+                        throw new ContasticException($"Unknown {nameof(TokenParserState)}: {state}");
                 }
             }
 
@@ -77,7 +77,7 @@ namespace Contastic.Parsing
             return parameters;
         }
 
-        private void ParseStart(ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseStart(TokenEnumerator enumerator, ref TokenParserState state)
         {
             var peek = enumerator.Peek();
 
@@ -87,10 +87,10 @@ namespace Contastic.Parsing
                 return;
             }
 
-            state = ParameterParserState.InPreamble;
+            state = TokenParserState.InPreamble;
         }
         
-        private void ParsePreamble(ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParsePreamble(TokenEnumerator enumerator, ref TokenParserState state)
         {
             var peek = enumerator.Peek();
 
@@ -99,44 +99,44 @@ namespace Contastic.Parsing
                 case "-":
                     if (enumerator.IsPeek("--"))
                     {
-                        state = ParameterParserState.InArgument;
+                        state = TokenParserState.InArgument;
                         enumerator.Next(2);
                     }
                     else
                     {
-                        state = ParameterParserState.InSwitch;
+                        state = TokenParserState.InSwitch;
                         enumerator.Next();
                     }
                     break;
 
                 case @"""":
-                    state = ParameterParserState.InDoubleQuotedVerb;
+                    state = TokenParserState.InDoubleQuotedVerb;
                     enumerator.Next();
                     break;
                     
                 case "'":
-                    state = ParameterParserState.InSingleQuotedVerb;
+                    state = TokenParserState.InSingleQuotedVerb;
                     enumerator.Next();
                     break;
 
                 default:
-                    state = ParameterParserState.InVerb;
+                    state = TokenParserState.InVerb;
                     break;
             }
         }
 
-        private void ParseVerb(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseVerb(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
             switch (next)
             {
                 case " ":
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     if (!string.IsNullOrWhiteSpace(parameter.LongName))
                     {
                         parameters.Add(parameter);
-                        parameter = new Parameter
+                        parameter = new Token
                         {
                             Index = parameters.Count
                         };
@@ -145,37 +145,37 @@ namespace Contastic.Parsing
 
                 case "=":
                 case ":":
-                    state = ParameterParserState.InValue;
+                    state = TokenParserState.InValue;
                     break;
 
                 default:
-                    parameter.Type = ParameterType.Verb;
+                    parameter.Type = TokenType.Argument;
                     parameter.AppendName(next);
                     break;
             }
         }
 
-        private void ParseValue(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseValue(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
             switch (next)
             {
                 case @"""":
-                    state = ParameterParserState.InDoubleQuotedValue;
+                    state = TokenParserState.InDoubleQuotedValue;
                     break;
 
                 case @"'":
-                    state = ParameterParserState.InSingleQuotedValue;
+                    state = TokenParserState.InSingleQuotedValue;
                     break;
 
                 case " ":
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     if (!string.IsNullOrWhiteSpace(parameter.LongName) ||
                         parameter.ShortName != '\0') 
                     {
                         parameters.Add(parameter);
-                        parameter = new Parameter
+                        parameter = new Token
                         {
                             Index = parameters.Count
                         };
@@ -189,18 +189,18 @@ namespace Contastic.Parsing
             }
         }
 
-        private void ParseDoubleQuotedVerb(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseDoubleQuotedVerb(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
             switch (next)
             {
                 case @"""":
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     if (parameter.HasName)
                     {
                         parameters.Add(parameter);
-                        parameter = new Parameter
+                        parameter = new Token
                         {
                             Index = parameters.Count
                         };
@@ -213,18 +213,18 @@ namespace Contastic.Parsing
             }
         }
 
-        private void ParseSingleQuotedVerb(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseSingleQuotedVerb(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
             switch (next)
             {
                 case "'":
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     if (parameter.HasName)
                     {
                         parameters.Add(parameter);
-                        parameter = new Parameter
+                        parameter = new Token
                         {
                             Index = parameters.Count
                         };
@@ -237,18 +237,18 @@ namespace Contastic.Parsing
             }
         }
 
-        private void ParseDoubleQuotedValue(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseDoubleQuotedValue(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
             switch (next)
             {
                 case @"""":
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     if (!string.IsNullOrWhiteSpace(parameter.LongName))
                     {
                         parameters.Add(parameter);
-                        parameter = new Parameter
+                        parameter = new Token
                         {
                             Index = parameters.Count
                         };
@@ -261,18 +261,18 @@ namespace Contastic.Parsing
             }
         }
 
-        private void ParseSingleQuotedValue(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseSingleQuotedValue(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
             switch (next)
             {
                 case @"'":
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     if (!string.IsNullOrWhiteSpace(parameter.LongName))
                     {
                         parameters.Add(parameter);
-                        parameter = new Parameter
+                        parameter = new Token
                         {
                             Index = parameters.Count
                         };
@@ -285,28 +285,28 @@ namespace Contastic.Parsing
             }
         }
 
-        private void ParseSwitch(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseSwitch(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
             switch (next)
             {
                 case " ":
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     break;
 
                 case "=":
                 case ":":
-                    state = ParameterParserState.InValue;
+                    state = TokenParserState.InValue;
                     break;
 
                 default:
                     parameter.ShortName = char.Parse(next);
-                    parameter.Type = ParameterType.Argument;
+                    parameter.Type = TokenType.Option;
                     if (enumerator.IsPeek("=", ":") == false)
                     {
                         parameters.Add(parameter);
-                        parameter = new Parameter
+                        parameter = new Token
                         {
                             Index = parameters.Count
                         };
@@ -315,7 +315,7 @@ namespace Contastic.Parsing
             }
         }
 
-        private void ParseArgument(ref List<Parameter> parameters, ref Parameter parameter, ParameterEnumerator enumerator, ref ParameterParserState state)
+        private void ParseArgument(ref List<Token> parameters, ref Token parameter, TokenEnumerator enumerator, ref TokenParserState state)
         {
             var next = enumerator.Next();
 
@@ -323,21 +323,21 @@ namespace Contastic.Parsing
             {
                 case " ":
                     parameters.Add(parameter);
-                    parameter = new Parameter
+                    parameter = new Token
                     {
                         Index = parameters.Count
                     };
-                    state = ParameterParserState.InPreamble;
+                    state = TokenParserState.InPreamble;
                     break;
 
                 case "=":
                 case ":":
-                    state = ParameterParserState.InValue;
+                    state = TokenParserState.InValue;
                     break;
 
                 default:
                     parameter.AppendName(next);
-                    parameter.Type = ParameterType.Argument;
+                    parameter.Type = TokenType.Option;
                     break;
             }
         }

@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Contastic.Commands;
 
-namespace Contastic.Demo.Single.Core
+namespace Contastic
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var runner = new Runner();
+            runner.Register<CopySingleCommand>();
+
+            var exitCode = await runner.Run(args);
+
+            Environment.Exit(exitCode);
         }
     }
 }

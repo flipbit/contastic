@@ -2,7 +2,7 @@
 
 namespace Contastic.Parsing
 {
-    internal class ParameterEnumerator
+    internal class TokenEnumerator
     {
         private readonly string input;
         private readonly int patternLength;
@@ -11,7 +11,7 @@ namespace Contastic.Parsing
 
         private bool resetNextLine = true;
 
-        public ParameterEnumerator(string input)
+        public TokenEnumerator(string input)
         {
             this.input = input;
 

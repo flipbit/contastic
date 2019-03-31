@@ -1,41 +1,45 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 using Contastic.Models;
 
 namespace Contastic.Binding
 {
-    internal class CanBindResult
+    public class CanBindResult
     {
         public List<Verb> BoundVerbs { get; }
 
         public List<Argument> BoundArguments { get; }
 
-        public List<Switch> BoundSwitches { get; }
+        public List<Option> BoundOptions { get; }
 
         public List<Verb> UnboundVerbs { get; }
 
-        public List<Argument> UnboundArguments { get; }
+        public List<Argument> UnboundArguments { get; set; }
 
-        public List<Switch> UnboundSwitches { get; }
+        public List<Option> UnboundOptions { get; }
 
         public List<Verb> UnknownVerbs { get; }
 
-        public List<Argument> UnknownArguments { get; }
+        public List<Option> UnknownOptions { get; }
+
+        public List<Argument> UnknownArguments { get; set; }
 
         public bool Bound { get; set; }
 
         public Type Type { get; set; }
 
-        public int TotalBound => BoundVerbs.Count + BoundArguments.Count + BoundSwitches.Count;
+        public int TotalBound => BoundVerbs.Count + BoundArguments.Count + BoundOptions.Count;
 
-        public int TotalUnbound => UnboundVerbs.Count + UnboundArguments.Count + UnboundSwitches.Count;
+        public int TotalUnbound => UnboundVerbs.Count + UnboundArguments.Count + UnboundOptions.Count;
 
-        public bool HasUnknownArguments => UnknownVerbs.Count + UnknownArguments.Count > 0;
+        public bool HasUnknownArguments => UnknownVerbs.Count + UnknownArguments.Count + UnknownOptions.Count > 0;
 
-        public bool HasNoArguments => BoundArguments.Count + BoundSwitches.Count == 0;
+        public bool HasNoArguments => BoundOptions.Count + BoundArguments.Count == 0;
 
         public string Verbs
         {
@@ -54,8 +58,8 @@ namespace Contastic.Binding
         {
             get
             {
-                var arguments = BoundArguments
-                    .Concat(UnboundArguments)
+                var arguments = BoundOptions
+                    .Concat(UnboundOptions)
                     .Where(a => a.Unnamed)
                     .Where(a => a.PropertyInfo != null)
                     .OrderBy(a => a.Order)
@@ -65,21 +69,64 @@ namespace Contastic.Binding
             }
         }
 
+        public string Description
+        {
+            get
+            {
+                var description = string.Empty;
+
+                var attribute = Type.GetCustomAttribute<DescriptionAttribute>();
+                if (attribute != null)
+                {
+                    description = attribute.Description;
+                }
+                else
+                {
+                    description = Type.Name;
+                }
+
+                return description;
+            }
+        }
+
+        public IList<Argument> AllArguments
+        {
+            get
+            {
+                return BoundArguments
+                    .Concat(UnboundArguments)
+                    .OrderBy(a => a.Name)
+                    .ToList();
+            }
+        }
+
+        public IList<Option> AllOptions
+        {
+            get
+            {
+                return BoundOptions
+                    .Concat(UnboundOptions)
+                    .OrderBy(o => o.Name)
+                    .ToList();
+            }
+        }
+
         public CanBindResult()
         {
             BoundVerbs = new List<Verb>();
             BoundArguments = new List<Argument>();
-            BoundSwitches = new List<Switch>();
+            BoundOptions = new List<Option>();
 
             UnboundVerbs = new List<Verb>();
             UnboundArguments = new List<Argument>();
-            UnboundSwitches = new List<Switch>();
+            UnboundOptions = new List<Option>();
 
             UnknownVerbs = new List<Verb>();
             UnknownArguments = new List<Argument>();
+            UnknownOptions = new List<Option>();
         }
 
-        public void AddBoundVerb(Parameter parameter, int order)
+        internal void AddBoundVerb(Token parameter, int order)
         {
             BoundVerbs.Add(new Verb
             {
@@ -89,19 +136,19 @@ namespace Contastic.Binding
             });
         }
 
-        public void AddUnboundVerb(VerbAttribute verb, int order)
+        public void AddUnboundVerb(string verb, int order)
         {
             UnboundVerbs.Add(new Verb
             {
-                Name = verb.Name,
+                Name = verb,
                 Index = -1,
                 Order = order
             });
         }
 
-        public void AddBoundArgument(PropertyInfo property, Parameter parameter, string value, bool  unnamed, int order)
+        internal void AddBoundOption(PropertyInfo property, Token parameter, string value, bool  unnamed, int order)
         {
-            BoundArguments.Add(new Argument
+            BoundOptions.Add(new Option
             {
                 PropertyInfo = property,
                 LongName = parameter.LongName,
@@ -113,21 +160,21 @@ namespace Contastic.Binding
             });
         }
 
-        public void AddUnboundArgument(PropertyInfo property, ParameterAttribute parameter)
+        internal void AddUnboundOption(PropertyInfo property, OptionAttribute option)
         {
-            UnboundArguments.Add(new Argument
+            UnboundOptions.Add(new Option
             {
                 PropertyInfo = property,
-                LongName = parameter.LongName,
-                ShortName = parameter.ShortName,
-                Required = parameter.Required,
+                LongName = option.LongName,
+                ShortName = option.ShortName,
+                Required = option.Required,
                 Index = 0
             });
         }
 
-        public void AddUnboundArgument(PropertyInfo property, UnnamedParameterAttribute parameter)
+        internal void AddUnboundOption(PropertyInfo property, ArgumentAttribute parameter)
         {
-            UnboundArguments.Add(new Argument
+            UnboundOptions.Add(new Option
             {
                 PropertyInfo = property,
                 Required = parameter.Required,
@@ -137,25 +184,66 @@ namespace Contastic.Binding
             });
         }
 
-        public void AddBoundSwitch(Parameter parameter)
+        internal void AddUnboundArgument(ArgumentAttribute attribute, PropertyInfo propertyInfo)
         {
-            BoundSwitches.Add(new Switch
+            var name = attribute.Name;
+            if (string.IsNullOrEmpty(name)) name = propertyInfo.Name;
+
+            UnboundArguments.Add(new Argument
             {
-                LongName = parameter.LongName,
-                ShortName = parameter.ShortName,
-                Index = parameter.Index
+                Name = name,
+                Required = attribute.Required,
+                Index = attribute.Order,
+                PropertyInfo = propertyInfo
             });
         }
 
-        public void AddUnboundSwitch(SwitchAttribute attribute)
+        internal void AddBoundArgument(ArgumentAttribute attribute, Token token, PropertyInfo propertyInfo)
         {
-            UnboundSwitches.Add(new Switch
+            var name = attribute.Name;
+            if (string.IsNullOrEmpty(name)) name = propertyInfo.Name;
+
+            BoundArguments.Add(new Argument
             {
-                LongName = attribute.LongName,
-                ShortName = attribute.ShortName,
+                Name = name,
                 Required = attribute.Required,
-                Index = 0
+                Index = attribute.Order,
+                Value = token.Value,
+                PropertyInfo = propertyInfo
             });
+        }
+
+        public string ToHelpText()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var argument in AllArguments)
+            {
+                if (sb.Length > 0) sb.Append(" ");
+
+                sb.Append("<");
+                sb.Append(argument.Name.ToLower());
+                sb.Append(">");
+            }
+
+            foreach (var option in AllOptions)
+            {
+                if (sb.Length > 0) sb.Append(" ");
+
+                if (string.IsNullOrEmpty(option.LongName) == false)
+                {
+                    sb.Append("--");
+                    sb.Append(option.LongName);
+                }
+
+                else if (option.ShortName != '\0')
+                {
+                    sb.Append("-");
+                    sb.Append(option.ShortName);
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }

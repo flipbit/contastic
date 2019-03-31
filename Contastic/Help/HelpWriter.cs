@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using Contastic.Binding;
 using Contastic.Models;
+using Contastic.Utils;
 
 namespace Contastic
 {
-    internal class HelpDescription
+    public class HelpWriter : IHelpWriter
     {
         public void Write(Invocation invocation)
         {
@@ -75,9 +73,105 @@ namespace Contastic
                 // Unknown Arguments
         }
 
+        public void WriteInteractive(Invocation invocation)
+        {
+            if (invocation.HasAnyBoundVerbs)
+            {
+                var bindResult = invocation.BestMatchingBinding;
+
+                WriteInteractive(bindResult);
+            }
+            else
+            {
+                WriteInteractiveUnknown(invocation);
+            }
+        }
+
+        public void WriteInteractiveUnknown(Invocation invocation)
+        {
+            Console.WriteLine($"Unknown command: {invocation.Args}");
+        }
+
+        public void WriteInteractiveHelp(Invocation invocation)
+        {
+            WriteApplicationHeader();
+            Console.WriteLine();
+            Console.WriteLine("COMMANDS");
+
+            var commands = invocation
+                .BindResults
+                .ToList();
+
+            foreach (var command in commands)
+            {
+                Console.Write($"  {command.Verbs}");
+
+                if (!string.IsNullOrEmpty(command.Description))
+                {
+                    Console.WriteLine($" - {command.Description}");
+                }
+                else
+                {
+                    Console.WriteLine($" - {command.Type.FullName}");
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        public void WriteInteractive(Invocation invocation, string command)
+        {
+            var bindResult = invocation
+                .BindResults
+                .FirstOrDefault(br => br.Verbs == command);
+
+            if (bindResult != null)
+            {
+                WriteInteractive(bindResult);
+            }
+        }
+
+        public void WriteInteractive(CanBindResult bindResult)
+        {
+            if (bindResult != null)
+            {
+                var table = new TextTable();
+                table.ColumnSeparator = "  ";
+                table.Align(Align.Right, Align.Left);
+
+                table.AddHeader(bindResult.Description);
+                table.AddHeader("");
+
+                var arguments = bindResult
+                    .BoundOptions.Where(a => a.Unnamed)
+                    .Concat(bindResult.UnboundOptions.Where(a => a.Unnamed))
+                    .OrderBy(a => a.Name)
+                    .ToList();
+
+                if (arguments.Any())
+                {
+                    table.AddHeader("ARGUMENTS");
+                    foreach (var argument in arguments)
+                    {
+                        table.AddRow($"  [{argument.Name}]", argument.Description);
+                    }
+
+                }
+
+                GetOptions(bindResult, table);
+
+                table.WriteConsole();
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine($"Unknown command.");   
+            }
+        }
+
         private void WriteUnknownVerbs(Invocation invocation)
         {
-            var details = AppDetails.Current(invocation);
+            var details = new AppInfo();
 
             Console.WriteLine($"Unknown command: {invocation.Args}");
             Console.WriteLine();
@@ -87,7 +181,7 @@ namespace Contastic
 
         private void WriteNoArgumentsSpecificCommand(CanBindResult match)
         {
-            var details = AppDetails.Current(null);
+            var details = new AppInfo();
 
             Console.WriteLine(details.Description);
             Console.WriteLine();
@@ -100,7 +194,7 @@ namespace Contastic
 
         private void WriteMultipleCommandNoArguments(Invocation invocation)
         {
-            var details = AppDetails.Current(invocation);
+            var details = new AppInfo();
 
             Console.WriteLine(details.Description);
             Console.WriteLine();
@@ -140,7 +234,7 @@ namespace Contastic
                 Console.WriteLine($"  {verb.Name}");
             }
 
-            foreach (var argument in binding.UnknownArguments)
+            foreach (var argument in binding.UnknownOptions)
             {
                 if (string.IsNullOrWhiteSpace(argument.LongName) == false)
                 {
@@ -160,9 +254,9 @@ namespace Contastic
         {
             var binding = invocation.BindResults.First();
 
-            var details = AppDetails.Current(invocation);
+            var details = new AppInfo();
             var verbs = GetVerbs(binding);
-            var options = GetOptions(binding);
+            var options = GetOptions(binding, new TextTable());
 
             Console.WriteLine(details.Description);
             Console.WriteLine();
@@ -183,45 +277,50 @@ namespace Contastic
             Console.WriteLine();
         }
 
-        private List<string> GetOptions(CanBindResult binding)
+        private List<string> GetOptions(CanBindResult binding, TextTable table)
         {
             var options = new List<string>();
 
             var allOptions = new List<IOption>();
-            allOptions.AddRange(binding.BoundArguments);
-            allOptions.AddRange(binding.UnboundArguments);
-            allOptions.AddRange(binding.BoundSwitches);
-            allOptions.AddRange(binding.UnboundSwitches);
+            allOptions.AddRange(binding.BoundOptions.Where(a => a.Unnamed == false));
+            allOptions.AddRange(binding.UnboundOptions.Where(a => a.Unnamed == false));
 
             allOptions = allOptions
                 .OrderBy(o => o.ShortName)
                 .ThenBy(o => o.LongName)
                 .ToList();
 
+            if (allOptions.Any())
+            {
+                table.AddHeader("");
+                table.AddHeader("OPTIONS");
+            }
+
             foreach (var option in allOptions)
             {
-                var optionString = $"  ";
+                var switchString = "  ";
 
                 if (option.ShortName != '\0')
                 {
-                    optionString += $"-{option.ShortName}";
+                    switchString += $"-{option.ShortName}";
                 }
 
                 if (string.IsNullOrEmpty(option.LongName) == false)
                 {
-                    if (string.IsNullOrWhiteSpace(optionString) == false)
+                    if (string.IsNullOrWhiteSpace(switchString) == false)
                     {
-                        optionString += ", ";
+                        switchString += ", ";
                     }
 
-                    optionString += $"--{option.LongName}";
+                    switchString += $"--{option.LongName}";
                 }
 
                 // TODO: Property Name / Description
+                table.AddRow(switchString, option.Description);
 
-                if (string.IsNullOrWhiteSpace(optionString) == false)
+                if (string.IsNullOrWhiteSpace(switchString) == false)
                 {
-                    options.Add(optionString);
+                    options.Add(switchString);
                 }
             }
 
@@ -248,61 +347,21 @@ namespace Contastic
             }
         }
 
-        private class AppDetails
+        private void WriteApplicationHeader()
         {
-            public string FileName { get; set; }
+            var info = new AppInfo();
 
-            public string Prompt { get; set; }
-
-            public string Description { get; set; }
-
-            public static AppDetails Current(Invocation invocation)
+            if (string.IsNullOrEmpty(info.Title) == false)
             {
-                var details = new AppDetails();
-
-                var assembly = Assembly.GetEntryAssembly();
-                var processName = assembly.Location;
-                details.FileName = Path.GetFileName(processName);
-                details.Description = GetCommandDescription();
-                details.Prompt = ">";
-
-                return details;
-            }        
-            
-            private static string GetCommandDescription()
-            {
-                var sb = new StringBuilder();
-
-                var assembly = Assembly.GetEntryAssembly();
-
-                var title = assembly
-                    .GetCustomAttributes(typeof(AssemblyTitleAttribute), true)
-                    .Cast<AssemblyTitleAttribute>()
-                    .FirstOrDefault();
-
-                if (title != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(title.Title))
-                    {
-                        sb.AppendLine(title.Title);
-                    }
-                }
-
-                var descriptionAttribute = assembly
-                    .GetCustomAttributes(typeof(AssemblyDescriptionAttribute), true)
-                    .Cast<AssemblyDescriptionAttribute>()
-                    .FirstOrDefault();
-
-                if (descriptionAttribute != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(descriptionAttribute.Description))
-                    {
-                        sb.AppendLine(descriptionAttribute.Description);
-                    }
-                }
-
-                return sb.ToString();
+                Console.WriteLine(info.Title);
             }
+
+            if (string.IsNullOrEmpty(info.Description) == false)
+            {
+                Console.WriteLine(info.Description);
+            }
+
+            Console.WriteLine($"Version: {info.Version}  Built: {info.BuildDate:d MMM yyyy}");
         }
     }
 }

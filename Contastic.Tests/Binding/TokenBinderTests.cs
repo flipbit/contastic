@@ -5,16 +5,16 @@ using NUnit.Framework;
 namespace Contastic.Binding
 {
     [TestFixture]
-    public class ParameterBinderTests
+    public class TokenBinderTests
     {
-        private ParameterBinder binder;
-        private ParameterParser parser;
+        private TokenBinder binder;
+        private TokenParser parser;
 
         [SetUp]
         public void SetUp()
         {
-            binder = new ParameterBinder();
-            parser = new ParameterParser();
+            binder = new TokenBinder();
+            parser = new TokenParser();
         }
 
         [Test]
@@ -59,9 +59,9 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.BoundArguments.Count);
-            Assert.AreEqual("single-argument", result.BoundArguments[0].LongName);
-            Assert.AreEqual(0, result.BoundArguments[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual("single-argument", result.BoundOptions[0].LongName);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
         }
 
         [Test]
@@ -74,9 +74,9 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.BoundArguments.Count);
-            Assert.AreEqual("single-argument", result.BoundArguments[0].LongName);
-            Assert.AreEqual(0, result.BoundArguments[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual("single-argument", result.BoundOptions[0].LongName);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
 
             Assert.AreEqual("foo", result.Value.Argument);
         }
@@ -94,10 +94,10 @@ namespace Contastic.Binding
             Assert.AreEqual(0, result.BoundVerbs.Count);
             Assert.AreEqual(0, result.UnknownVerbs.Count);
 
-            Assert.AreEqual(1, result.BoundArguments.Count);
-            Assert.AreEqual("single-argument", result.BoundArguments[0].LongName);
-            Assert.AreEqual("foo", result.BoundArguments[0].Value);
-            Assert.AreEqual(0, result.BoundArguments[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual("single-argument", result.BoundOptions[0].LongName);
+            Assert.AreEqual("foo", result.BoundOptions[0].Value);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
 
             Assert.AreEqual("foo", result.Value.Argument);
         }
@@ -112,12 +112,12 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.UnboundArguments.Count);
-            Assert.AreEqual("single-argument", result.UnboundArguments[0].LongName);
-            Assert.AreEqual(0, result.UnboundArguments[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual("single-argument", result.UnboundOptions[0].LongName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
 
-            Assert.AreEqual(1, result.UnknownArguments.Count);
-            Assert.AreEqual("single-argument-miss", result.UnknownArguments[0].LongName);
+            Assert.AreEqual(1, result.UnknownOptions.Count);
+            Assert.AreEqual("single-argument-miss", result.UnknownOptions[0].LongName);
         }
 
         [Test]
@@ -130,9 +130,9 @@ namespace Contastic.Binding
             Assert.IsFalse(result.Bound);
             Assert.IsNull(result.Value);
 
-            Assert.AreEqual(1, result.UnboundArguments.Count);
-            Assert.AreEqual("single-argument", result.UnboundArguments[0].LongName);
-            Assert.AreEqual(0, result.UnboundArguments[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual("single-argument", result.UnboundOptions[0].LongName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
         }
 
         [Test]
@@ -145,9 +145,9 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.BoundArguments.Count);
-            Assert.AreEqual('s', result.BoundArguments[0].ShortName);
-            Assert.AreEqual(0, result.BoundArguments[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual('s', result.BoundOptions[0].ShortName);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
         }
 
         [Test]
@@ -160,9 +160,9 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.BoundArguments.Count);
-            Assert.AreEqual('s', result.BoundArguments[0].ShortName);
-            Assert.AreEqual(0, result.BoundArguments[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual('s', result.BoundOptions[0].ShortName);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
 
             Assert.AreEqual("foo", result.Value.Argument);
         }
@@ -180,10 +180,10 @@ namespace Contastic.Binding
             Assert.AreEqual(0, result.BoundVerbs.Count);
             Assert.AreEqual(0, result.UnknownVerbs.Count);
 
-            Assert.AreEqual(1, result.BoundArguments.Count);
-            Assert.AreEqual('s', result.BoundArguments[0].ShortName);
-            Assert.AreEqual("foo", result.BoundArguments[0].Value);
-            Assert.AreEqual(0, result.BoundArguments[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual('s', result.BoundOptions[0].ShortName);
+            Assert.AreEqual("foo", result.BoundOptions[0].Value);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
 
             Assert.AreEqual("foo", result.Value.Argument);
         }
@@ -198,12 +198,12 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.UnboundArguments.Count);
-            Assert.AreEqual('s', result.UnboundArguments[0].ShortName);
-            Assert.AreEqual(0, result.UnboundArguments[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual('s', result.UnboundOptions[0].ShortName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
 
-            Assert.AreEqual(1, result.UnknownArguments.Count);
-            Assert.AreEqual('d', result.UnknownArguments[0].ShortName);
+            Assert.AreEqual(1, result.UnknownOptions.Count);
+            Assert.AreEqual('d', result.UnknownOptions[0].ShortName);
         }
 
         [Test]
@@ -216,9 +216,9 @@ namespace Contastic.Binding
             Assert.IsFalse(result.Bound);
             Assert.IsNull(result.Value);
 
-            Assert.AreEqual(1, result.UnboundArguments.Count);
-            Assert.AreEqual('s', result.UnboundArguments[0].ShortName);
-            Assert.AreEqual(0, result.UnboundArguments[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual('s', result.UnboundOptions[0].ShortName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
         }
 
         [Test]
@@ -231,9 +231,9 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.BoundSwitches.Count);
-            Assert.AreEqual("single-switch", result.BoundSwitches[0].LongName);
-            Assert.AreEqual(0, result.BoundSwitches[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual("single-switch", result.BoundOptions[0].LongName);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
 
             Assert.IsTrue(result.Value.Flag);
         }
@@ -248,9 +248,9 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.BoundSwitches.Count);
-            Assert.AreEqual('s', result.BoundSwitches[0].ShortName);
-            Assert.AreEqual(0, result.BoundSwitches[0].Index);
+            Assert.AreEqual(1, result.BoundOptions.Count);
+            Assert.AreEqual('s', result.BoundOptions[0].ShortName);
+            Assert.AreEqual(0, result.BoundOptions[0].Index);
 
             Assert.IsTrue(result.Value.Flag);
         }
@@ -265,9 +265,9 @@ namespace Contastic.Binding
             Assert.IsTrue(result.Bound);
             Assert.IsNotNull(result.Value);
 
-            Assert.AreEqual(1, result.UnboundSwitches.Count);
-            Assert.AreEqual('s', result.UnboundSwitches[0].ShortName);
-            Assert.AreEqual(0, result.UnboundSwitches[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual('s', result.UnboundOptions[0].ShortName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
 
             Assert.IsFalse(result.Value.Flag);
         }
@@ -282,9 +282,9 @@ namespace Contastic.Binding
             Assert.IsFalse(result.Bound);
             Assert.IsNull(result.Value);
 
-            Assert.AreEqual(1, result.UnboundSwitches.Count);
-            Assert.AreEqual('s', result.UnboundSwitches[0].ShortName);
-            Assert.AreEqual(0, result.UnboundSwitches[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual('s', result.UnboundOptions[0].ShortName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
         }
 
         [Test]
@@ -336,10 +336,10 @@ namespace Contastic.Binding
             Assert.AreEqual(2, result.TotalBound);
             Assert.AreEqual(1, result.TotalUnbound);
 
-            Assert.AreEqual(1, result.UnboundArguments.Count);
-            Assert.AreEqual("one", result.UnboundArguments[0].LongName);
-            Assert.AreEqual('o', result.UnboundArguments[0].ShortName);
-            Assert.AreEqual(0, result.UnboundArguments[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual("one", result.UnboundOptions[0].LongName);
+            Assert.AreEqual('o', result.UnboundOptions[0].ShortName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
         }
 
         [Test]
@@ -391,10 +391,10 @@ namespace Contastic.Binding
             Assert.AreEqual(2, result.TotalBound);
             Assert.AreEqual(1, result.TotalUnbound);
 
-            Assert.AreEqual(1, result.UnboundSwitches.Count);
-            Assert.AreEqual("one", result.UnboundSwitches[0].LongName);
-            Assert.AreEqual('o', result.UnboundSwitches[0].ShortName);
-            Assert.AreEqual(0, result.UnboundSwitches[0].Index);
+            Assert.AreEqual(1, result.UnboundOptions.Count);
+            Assert.AreEqual("one", result.UnboundOptions[0].LongName);
+            Assert.AreEqual('o', result.UnboundOptions[0].ShortName);
+            Assert.AreEqual(0, result.UnboundOptions[0].Index);
         }
 
         [Test]
@@ -431,9 +431,9 @@ namespace Contastic.Binding
             Assert.AreEqual(5, result.TotalBound);
             Assert.AreEqual(0, result.TotalUnbound);
 
-            Assert.AreEqual(4, result.BoundArguments.Count);
-            Assert.AreEqual("source", result.BoundArguments[2].Value);
-            Assert.AreEqual("destination", result.BoundArguments[3].Value);
+            Assert.AreEqual(2, result.BoundArguments.Count);
+            Assert.AreEqual("source", result.BoundArguments[0].Value);
+            Assert.AreEqual("destination", result.BoundArguments[1].Value);
 
             Assert.AreEqual("source", result.Value.Source);
             Assert.AreEqual("destination", result.Value.Destination);
@@ -454,9 +454,9 @@ namespace Contastic.Binding
             Assert.AreEqual(5, result.TotalBound);
             Assert.AreEqual(0, result.TotalUnbound);
 
-            Assert.AreEqual(4, result.BoundArguments.Count);
-            Assert.AreEqual("source", result.BoundArguments[2].Value);
-            Assert.AreEqual("destination", result.BoundArguments[3].Value);
+            Assert.AreEqual(2, result.BoundArguments.Count);
+            Assert.AreEqual("source", result.BoundArguments[0].Value);
+            Assert.AreEqual("destination", result.BoundArguments[1].Value);
 
             Assert.AreEqual("source", result.Value.Source);
             Assert.AreEqual("destination", result.Value.Destination);
@@ -477,9 +477,9 @@ namespace Contastic.Binding
             Assert.AreEqual(5, result.TotalBound);
             Assert.AreEqual(0, result.TotalUnbound);
 
-            Assert.AreEqual(4, result.BoundArguments.Count);
-            Assert.AreEqual("source path", result.BoundArguments[2].Value);
-            Assert.AreEqual("destination location", result.BoundArguments[3].Value);
+            Assert.AreEqual(2, result.BoundArguments.Count);
+            Assert.AreEqual("source path", result.BoundArguments[0].Value);
+            Assert.AreEqual("destination location", result.BoundArguments[1].Value);
 
             Assert.AreEqual("source path", result.Value.Source);
             Assert.AreEqual("destination location", result.Value.Destination);
@@ -499,9 +499,9 @@ namespace Contastic.Binding
             Assert.AreEqual(5, result.TotalBound);
             Assert.AreEqual(0, result.TotalUnbound);
 
-            Assert.AreEqual(4, result.BoundArguments.Count);
-            Assert.AreEqual("source path", result.BoundArguments[2].Value);
-            Assert.AreEqual("destination location", result.BoundArguments[3].Value);
+            Assert.AreEqual(2, result.BoundArguments.Count);
+            Assert.AreEqual("source path", result.BoundArguments[0].Value);
+            Assert.AreEqual("destination location", result.BoundArguments[1].Value);
         }
 
         [Test]
@@ -520,17 +520,40 @@ namespace Contastic.Binding
             Assert.AreEqual("foo", result.UnknownVerbs[0].Name);
         }
 
-        /*
+        [Test]
+        public void TestCanBindVerbRespectsOrderWhenOutOfOrder()
+        {
+            var parameters = parser.Parse(@"help copy destination");
+
+            var result = binder.CanBind<CopyCommand>(parameters);
+
+            Assert.IsFalse(result.Bound);
+
+            Assert.AreEqual(0, result.TotalBound);
+            Assert.AreEqual(1, result.UnboundVerbs.Count);
+
+            Assert.AreEqual(3, result.UnknownVerbs.Count);
+            Assert.AreEqual("help", result.UnknownVerbs[0].Name);
+            Assert.AreEqual("copy", result.UnknownVerbs[1].Name);
+            Assert.AreEqual("destination", result.UnknownVerbs[2].Name);
+        }
 
         [Test]
-        public void TestBindSingleVerbsCommandWhenBound()
+        public void TestCanBindVerbRespectsOrderWhenInOrder()
         {
-            var parameters = parser.Parse("copy from to");
+            var parameters = parser.Parse(@"help copy");
 
-            var bound = binder.TryBind<SingleVerbsCommand>(parameters, out var command);
+            var result = binder.CanBind<HelpCommand>(parameters);
 
-            Assert.IsTrue(bound);
-            Assert.IsNotNull(command);
-        }*/
+            Assert.IsTrue(result.Bound);
+
+            Assert.AreEqual(2, result.TotalBound);
+
+            Assert.AreEqual(1, result.BoundVerbs.Count);
+            Assert.AreEqual("help", result.BoundVerbs[0].Name);
+
+            Assert.AreEqual(1, result.BoundArguments.Count);
+            Assert.AreEqual("copy", result.BoundArguments[0].Value);
+        }
     }
 }

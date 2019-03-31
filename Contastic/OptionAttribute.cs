@@ -6,7 +6,7 @@ namespace Contastic
     /// Decorates a property with the target for an incoming command line <see cref="ParameterItem"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class ParameterAttribute : Attribute
+    public class OptionAttribute : Attribute
     {
         /// <summary>
         /// Gets or sets the name.
@@ -19,7 +19,7 @@ namespace Contastic
         public char ShortName { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ParameterAttribute"/> is required.
+        /// Gets or sets a value indicating whether this <see cref="OptionAttribute"/> is required.
         /// </summary>
         /// <value>
         ///   <c>true</c> if required; otherwise, <c>false</c>.

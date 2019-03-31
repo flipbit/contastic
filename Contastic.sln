@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contastic.Demo.Multiple.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contastic.Examples", "Contastic.Examples\Contastic.Examples.csproj", "{AAC7AD77-2F69-4B04-AED0-660F1FB60D0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contastic.DependencyInjection", "Contastic.DependencyInjection\Contastic.DependencyInjection.csproj", "{9E60BEC0-285D-45FF-BC91-85681EECA70B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{AAC7AD77-2F69-4B04-AED0-660F1FB60D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAC7AD77-2F69-4B04-AED0-660F1FB60D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAC7AD77-2F69-4B04-AED0-660F1FB60D0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E60BEC0-285D-45FF-BC91-85681EECA70B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E60BEC0-285D-45FF-BC91-85681EECA70B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E60BEC0-285D-45FF-BC91-85681EECA70B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E60BEC0-285D-45FF-BC91-85681EECA70B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

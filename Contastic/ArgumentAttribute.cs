@@ -3,18 +3,20 @@
 namespace Contastic
 {
     /// <summary>
-    /// Maps an unnamed parameter onto a class
+    /// Maps an unnamed option onto a class
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class UnnamedParameterAttribute : Attribute
+    public class ArgumentAttribute : Attribute
     {
+        public string Name { get; set; }
+
         /// <summary>
-        /// The unnamed parameter order
+        /// The unnamed option order
         /// </summary>
         public int Order { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="UnnamedParameterAttribute"/> is required.
+        /// Gets or sets a value indicating whether this <see cref="ArgumentAttribute"/> is required.
         /// </summary>
         /// <value>
         ///   <c>true</c> if required; otherwise, <c>false</c>.

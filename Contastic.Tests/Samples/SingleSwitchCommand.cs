@@ -4,7 +4,7 @@ namespace Contastic.Samples
 {
     public class SingleSwitchCommand : ICommand
     {
-        [Switch(LongName = "single-switch", ShortName = 's')]
+        [Option(LongName = "single-switch", ShortName = 's')]
         public bool Flag { get; set; }
 
         public Task<int> Execute()

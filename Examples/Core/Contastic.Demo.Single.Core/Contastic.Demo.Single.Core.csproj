@@ -3,6 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Contastic</RootNamespace>
+    <Description>Contastic single command demo application.</Description>
+    <Product>Contastic Demo</Product>
+    <Authors>Chris Wood</Authors>
+    <Company>flipbit.co.uk</Company>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Contastic.Examples\Contastic.Examples.csproj" />
+    <ProjectReference Include="..\..\..\Contastic\Contastic.csproj" />
+  </ItemGroup>
 
 </Project>

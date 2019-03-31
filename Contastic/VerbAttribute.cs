@@ -8,6 +8,10 @@ namespace Contastic
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class VerbAttribute : Attribute
     {
+        public VerbAttribute()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="VerbAttribute"/> class.
         /// </summary>

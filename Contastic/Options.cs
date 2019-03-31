@@ -16,15 +16,15 @@ namespace Contastic
         }
 
         /// <summary>
-        /// Gets the list of valid parameter switches.
+        /// Gets the list of valid option switches.
         /// </summary>
         /// <value>
-        /// The parameter switches.
+        /// The option switches.
         /// </value>
         public IList<string> ParameterSwitches { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether parameter matching is case insensitve.
+        /// Gets or sets a value indicating whether option matching is case insensitve.
         /// </summary>
         /// <value>
         ///   <c>true</c> if case insensitve; otherwise, <c>false</c>.

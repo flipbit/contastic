@@ -3,6 +3,18 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Contastic</RootNamespace>
+    <Description>An interactive console application demo</Description>
+    <PackageId>Contastic.Interactive</PackageId>
+    <Product>Contastic Interactive Demo</Product>
+    <AssemblyName>Contastic Demo - .NET Core</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Contastic.DependencyInjection\Contastic.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\..\Contastic.Examples\Contastic.Examples.csproj" />
+    <ProjectReference Include="..\..\..\Contastic\Contastic.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -4,35 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Contastic.Binding;
+using Contastic.Commands;
 using Contastic.Models;
 using Contastic.Parsing;
 
 namespace Contastic
 {
-    public class Runner
+    public class Runner : IRunner
     {
         public IList<Type> Commands { get; private set; }
 
-        public ParameterParser Parser { get; set; }
+        internal TokenParser Parser { get; set; }
 
-        internal ParameterBinder Binder { get; set; }
+        internal TokenBinder Binder { get; set; }
 
-        internal HelpDescription HelpWriter { get; set; }
+        public IHelpWriter HelpWriter { get; set; }
 
-        public IInvoker Invoker { get; set; }
+        public IInvoker Invoker
+        {
+            get => Binder.Invoker;
+            set => Binder.Invoker = value;
+        }
 
         public Runner()
         {
             Commands = new List<Type>();
-            Parser = new ParameterParser();
-            Binder = new ParameterBinder();
+            Parser = new TokenParser();
+            Binder = new TokenBinder();
             Invoker = new ActivatorInvoker();
-            HelpWriter = new HelpDescription();
-        }
-
-        public Runner(IServiceProvider serviceProvider)
-        {
-
+            HelpWriter = new SingleCommandHelpWriter();
         }
 
         internal Invocation Invoke(string args)
@@ -79,6 +79,11 @@ namespace Contastic
 
                 if (bindResult.Bound && bindResult.Value is ICommand command)
                 {
+                    if (bindResult.Value is HelpCommand helpCommand)
+                    {
+                        helpCommand.Invocation = invocation;
+                    }
+
                     return await command.Execute();
                 }
             }
@@ -93,6 +98,11 @@ namespace Contastic
         public void Register<T>() where T : ICommand
         {
             Commands.Add(typeof(T));
+        }
+
+        public void Register(Type type)
+        {
+            Commands.Add(type); 
         }
     }
 }

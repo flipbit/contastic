@@ -1,6 +1,6 @@
-﻿namespace Contastic.Models
+﻿namespace Contastic.Parsing
 {
-    internal enum ParameterParserState
+    internal enum TokenParserState
     {
         AtStart,
         InPreamble,

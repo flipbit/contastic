@@ -2,10 +2,11 @@
 
 namespace Contastic.Samples
 {
-    public class SingleSwitchRequiredCommand : ICommand
+    [Verb]
+    public class HelpCommand : ICommand
     {
-        [Option(LongName = "single-switch", ShortName = 's', Required = true)]
-        public bool Flag { get; set; }
+        [Argument]
+        public string Command { get; set; }
 
         public Task<int> Execute()
         {

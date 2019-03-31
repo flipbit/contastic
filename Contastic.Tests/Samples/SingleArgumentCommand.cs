@@ -4,7 +4,7 @@ namespace Contastic.Samples
 {
     public class SingleArgumentCommand : ICommand
     {
-        [Parameter(LongName = "single-argument", ShortName = 's')]
+        [Option(LongName = "single-argument", ShortName = 's')]
         public string Argument { get; set; }
 
         public Task<int> Execute()
