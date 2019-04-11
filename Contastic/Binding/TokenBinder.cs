@@ -150,11 +150,11 @@ namespace Contastic.Binding
             {
                 var arguments = property.GetCustomAttributes(typeof(OptionAttribute), true).Cast<OptionAttribute>();
 
-                foreach (var argument in arguments)
+                foreach (var option in arguments)
                 {
                     var matches = parameters
                         .Where(p => p.Type == TokenType.Option)
-                        .Where(p => p.LongName == argument.LongName)
+                        .Where(p => p.LongName == option.LongName)
                         .ToList();
 
                     if (matches.Any())
@@ -177,7 +177,7 @@ namespace Contastic.Binding
                             }
                         }
 
-                        result.AddBoundOption(property, first, value, false, 0);
+                        result.AddBoundOption(property, option, first, value);
 
                         if (result is BindResult boundResult)
                         {
@@ -197,7 +197,7 @@ namespace Contastic.Binding
 
                     matches = parameters
                         .Where(p => p.Type == TokenType.Option)
-                        .Where(p => p.ShortName == argument.ShortName)
+                        .Where(p => p.ShortName == option.ShortName)
                         .ToList();
 
                     if (matches.Any())
@@ -220,7 +220,7 @@ namespace Contastic.Binding
                             }
                         }
 
-                        result.AddBoundOption(property, first, value, false, 0);
+                        result.AddBoundOption(property, option, first, value);
 
                         if (result is BindResult boundResult)
                         {
@@ -238,12 +238,12 @@ namespace Contastic.Binding
                         continue;
                     }
 
-                    if (argument.Required == false)
+                    if (option.Required == false)
                     {
                         result.Bound = true;
                     }
 
-                    result.AddUnboundOption(property, argument);
+                    result.AddUnboundOption(property, option);
                 }
             }
         }

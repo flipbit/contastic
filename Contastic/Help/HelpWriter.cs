@@ -133,40 +133,6 @@ namespace Contastic
 
         public void WriteInteractive(CanBindResult bindResult)
         {
-            if (bindResult != null)
-            {
-                var table = new TextTable();
-                table.ColumnSeparator = "  ";
-                table.Align(Align.Right, Align.Left);
-
-                table.AddHeader(bindResult.Description);
-                table.AddHeader("");
-
-                var arguments = bindResult
-                    .BoundOptions.Where(a => a.Unnamed)
-                    .Concat(bindResult.UnboundOptions.Where(a => a.Unnamed))
-                    .OrderBy(a => a.Name)
-                    .ToList();
-
-                if (arguments.Any())
-                {
-                    table.AddHeader("ARGUMENTS");
-                    foreach (var argument in arguments)
-                    {
-                        table.AddRow($"  [{argument.Name}]", argument.Description);
-                    }
-
-                }
-
-                GetOptions(bindResult, table);
-
-                table.WriteConsole();
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.WriteLine($"Unknown command.");   
-            }
         }
 
         private void WriteUnknownVerbs(Invocation invocation)
@@ -186,7 +152,7 @@ namespace Contastic
             Console.WriteLine(details.Description);
             Console.WriteLine();
             Console.WriteLine("USAGE");
-            Console.WriteLine($"  $ dotnet .\\{details.FileName} {match.Verbs} {match.UnnamedArguments}");
+            Console.WriteLine($"  $ dotnet .\\{details.FileName} {match.Verbs} {match.ToHelpText()}");
             Console.WriteLine();
 
 
@@ -282,8 +248,6 @@ namespace Contastic
             var options = new List<string>();
 
             var allOptions = new List<IOption>();
-            allOptions.AddRange(binding.BoundOptions.Where(a => a.Unnamed == false));
-            allOptions.AddRange(binding.UnboundOptions.Where(a => a.Unnamed == false));
 
             allOptions = allOptions
                 .OrderBy(o => o.ShortName)

@@ -54,21 +54,6 @@ namespace Contastic.Binding
             }
         }
 
-        public string UnnamedArguments
-        {
-            get
-            {
-                var arguments = BoundOptions
-                    .Concat(UnboundOptions)
-                    .Where(a => a.Unnamed)
-                    .Where(a => a.PropertyInfo != null)
-                    .OrderBy(a => a.Order)
-                    .Select(a => $"[{a.PropertyInfo.Name}]");
-
-                return string.Join(" ", arguments);
-            }
-        }
-
         public string Description
         {
             get
@@ -146,17 +131,17 @@ namespace Contastic.Binding
             });
         }
 
-        internal void AddBoundOption(PropertyInfo property, Token parameter, string value, bool  unnamed, int order)
+        internal void AddBoundOption(PropertyInfo property, OptionAttribute option, Token token, string value)
         {
             BoundOptions.Add(new Option
             {
                 PropertyInfo = property,
-                LongName = parameter.LongName,
-                ShortName = parameter.ShortName,
+                LongName = token.LongName,
+                ShortName = token.ShortName,
                 Value = value,
-                Index = parameter.Index,
-                Order = order,
-                Unnamed = unnamed
+                Index = token.Index,
+                //Order = option.,
+                Required = option.Required
             });
         }
 
@@ -180,7 +165,6 @@ namespace Contastic.Binding
                 Required = parameter.Required,
                 Order = parameter.Order,
                 Index = 0,
-                Unnamed = true
             });
         }
 
@@ -232,14 +216,18 @@ namespace Contastic.Binding
 
                 if (string.IsNullOrEmpty(option.LongName) == false)
                 {
+                    if (option.Required == false) sb.Append("[");
                     sb.Append("--");
                     sb.Append(option.LongName);
+                    if (option.Required == false) sb.Append("]");
                 }
 
                 else if (option.ShortName != '\0')
                 {
+                    if (option.Required == false) sb.Append("[");
                     sb.Append("-");
                     sb.Append(option.ShortName);
+                    if (option.Required == false) sb.Append("]");
                 }
             }
 

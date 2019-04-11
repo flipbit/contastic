@@ -103,26 +103,6 @@ namespace Contastic
 
             table.AddHeader(bindResult.Description);
             table.AddHeader("");
-
-            var arguments = bindResult
-                .BoundOptions.Where(a => a.Unnamed)
-                .Concat(bindResult.UnboundOptions.Where(a => a.Unnamed))
-                .OrderBy(a => a.Name)
-                .ToList();
-
-            if (arguments.Any())
-            {
-                table.AddHeader("ARGUMENTS");
-                foreach (var argument in arguments)
-                {
-                    table.AddRow($"  [{argument.Name}]", argument.Description);
-                }
-
-            }
-
-            GetOptions(bindResult, table);
-
-            table.WriteConsole();
             Console.WriteLine();
         }
 
@@ -151,55 +131,6 @@ namespace Contastic
             Console.WriteLine("Run --help for usage.");
         }
 
-        private List<string> GetOptions(CanBindResult binding, TextTable table)
-        {
-            var options = new List<string>();
-
-            var allOptions = new List<IOption>();
-            allOptions.AddRange(binding.BoundOptions.Where(a => a.Unnamed == false));
-            allOptions.AddRange(binding.UnboundOptions.Where(a => a.Unnamed == false));
-
-            allOptions = allOptions
-                .OrderBy(o => o.ShortName)
-                .ThenBy(o => o.LongName)
-                .ToList();
-
-            if (allOptions.Any())
-            {
-                table.AddHeader("");
-                table.AddHeader("OPTIONS");
-            }
-
-            foreach (var option in allOptions)
-            {
-                var switchString = "  ";
-
-                if (option.ShortName != '\0')
-                {
-                    switchString += $"-{option.ShortName}";
-                }
-
-                if (string.IsNullOrEmpty(option.LongName) == false)
-                {
-                    if (string.IsNullOrWhiteSpace(switchString) == false)
-                    {
-                        switchString += ", ";
-                    }
-
-                    switchString += $"--{option.LongName}";
-                }
-
-                // TODO: Property Name / Description
-                table.AddRow(switchString, option.Description);
-
-                if (string.IsNullOrWhiteSpace(switchString) == false)
-                {
-                    options.Add(switchString);
-                }
-            }
-
-            return options;
-        }
 
         private void WriteApplicationHeader()
         {

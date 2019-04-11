@@ -37,9 +37,22 @@ namespace Contastic.Binding
             var token = new Token();
             token.AppendName("user");
             binding.AddBoundArgument(new ArgumentAttribute { Name = "foo" }, new Token(), propertyInfo);
-            binding.AddBoundOption(propertyInfo, token, "", false, 0);
+            binding.AddBoundOption(propertyInfo, new OptionAttribute{ Required = true },  token, "");
 
             Assert.AreEqual("<foo> --user", binding.ToHelpText());
+        }
+
+        [Test]
+        public void TestHelpTextWithOneArgumentAndOptionalOption()
+        {
+            var binding = new CanBindResult();
+            var propertyInfo = typeof(CopyCommand).GetProperties().First();
+            var token = new Token();
+            token.AppendName("user");
+            binding.AddBoundArgument(new ArgumentAttribute { Name = "foo" }, new Token(), propertyInfo);
+            binding.AddBoundOption(propertyInfo, new OptionAttribute{ Required = false }, token, "");
+
+            Assert.AreEqual("<foo> [--user]", binding.ToHelpText());
         }
     }
 }

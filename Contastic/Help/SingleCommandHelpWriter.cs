@@ -147,8 +147,6 @@ namespace Contastic
             var options = new List<string>();
 
             var allOptions = new List<IOption>();
-            allOptions.AddRange(binding.BoundOptions.Where(a => a.Unnamed == false));
-            allOptions.AddRange(binding.UnboundOptions.Where(a => a.Unnamed == false));
 
             allOptions = allOptions
                 .OrderBy(o => o.ShortName)

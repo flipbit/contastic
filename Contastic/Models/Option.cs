@@ -20,8 +20,6 @@ namespace Contastic.Models
 
         public int Order { get; set; }
 
-        public bool Unnamed { get; set; }
-
         public string Description
         {
             get
